@@ -1,9 +1,16 @@
-var exec = require('cordova/exec');
+var detector = {
+  onCaptureStatusChanged: function (successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, 'DetectScreenRecording', 'onCaptureStatusChanged', []);
+  },
+  isCaptured: function (successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, 'DetectScreenRecording', 'isCaptured', []);
+  }
+}
 
-exports.onCaptureStatusChanged = function (success, error) {
-  exec(success, error, "DetectScreenRecording", "onCaptureStatusChanged");
-};
 
-exports.isCaptured = function (success, error) {
-  exec(success, error, "DetectScreenRecording", "isCaptured");
-};
+cordova.addConstructor(function () {
+  if (!window.plugins) {window.plugins = {};}
+
+  window.plugins.DetectScreenRecording = detector;
+  return window.plugins.DetectScreenRecording;
+});
